@@ -12,13 +12,13 @@
               integrity="sha384-zCbKRCUGaJDkqS1kPbPd7TveP5iyJE0EjAuZQTgFLD2ylzuqKfdKlfG/eSrtxUkn"
               crossorigin="anonymous">
 
-        <title>Мониторинг технического состояния техники связи</title>
+        <title>Городская ЦМСЧ</title>
     </head>
     <body>
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
             <a href="/">
-                <span class="navbar-brand mb-0 h1">Мониторинг технического состояния техники связи</span>
+                <span class="navbar-brand mb-0 h1">Городская ЦМСЧ</span>
             </a>
             <#if user.email??>
                 <div class="dropdown text-end">

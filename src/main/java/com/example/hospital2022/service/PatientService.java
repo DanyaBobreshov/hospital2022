@@ -12,10 +12,14 @@ public class PatientService implements Service<Patient> {
     private final PatientRepo patientRepo;
     @Override
     public List<Patient> list(String title) {
+        if(title!=null)
         return patientRepo.findByUserSecondNameContains(title);
+        return patientRepo.findAll();
     }
     public List<Patient> list(String name, String secondName) {
+        if(name!=null||secondName!=null)
         return patientRepo.findByUserSecondNameContainsAndUserNameContains(secondName,name);
+        return patientRepo.findAll();
     }
     @Override
     public Patient findById(Long id) {

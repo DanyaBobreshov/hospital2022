@@ -17,7 +17,9 @@ public class ExaminationService implements com.example.hospital2022.service.Serv
     }
 
     public List<Examination> diseaseList(Long diseaseId){
+        if(diseaseId!=null)
         return examinationRepo.findByDiseaseId(diseaseId);
+        return examinationRepo.findAll();
     }
 
     @Override

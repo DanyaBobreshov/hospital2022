@@ -4,6 +4,7 @@ import com.example.hospital2022.model.Appointment;
 import com.example.hospital2022.repository.AppointmentRepo;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @org.springframework.stereotype.Service
@@ -11,9 +12,25 @@ import java.util.List;
 public class AppointmentService implements Service<Appointment> {
     private final AppointmentRepo appointmentRepo;
 
+    Boolean isActive(Appointment appointment){
+        if(appointment.getExamination()==null){
+            return false;
+        }
+        return true;
+    }
+
+    Boolean isActual(Appointment appointment){
+        if(!appointment.getDate().isAfter(LocalDate.now())){
+            return false;
+        }
+        return true;
+    }
+
     @Override
     public List<Appointment> list(String title) {
-        return appointmentRepo.findByDoctorUserSecondNameContains(title);
+      if(title!=null)  return appointmentRepo.findByDoctorUserSecondNameContains(title);
+      else return appointmentRepo.findAll();
+
     }
 
     public List<Appointment> listPatient(Long patientId){

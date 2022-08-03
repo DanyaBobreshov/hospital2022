@@ -4,6 +4,7 @@ import com.example.hospital2022.model.Doctor;
 import com.example.hospital2022.repository.DoctorRepo;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @org.springframework.stereotype.Service
@@ -13,7 +14,8 @@ public class DoctorService implements Service<Doctor> {
 
     @Override
     public List<Doctor> list(String name) {
-        return doctorRepo.findByUserSecondNameContains(name);
+        if (name!=null)return doctorRepo.findByUserSecondNameContains(name);
+        else return doctorRepo.findAll();
     }
 
     @Override
@@ -36,12 +38,17 @@ public class DoctorService implements Service<Doctor> {
         return null;
     }
 
+    public Doctor findByUserId(Long id){
+        return doctorRepo.findByUserId(id).orElse(null);
+    }
+
     public void correct(Doctor doctor, String name, String secondName, String fatherName,
-                        String telephone, String speciality){
+                        String telephone, LocalDate dateOfBurn, String speciality){
         doctor.getUser().setName(name);
         doctor.getUser().setSecondName(secondName);
         doctor.getUser().setFatherName(fatherName);
         doctor.getUser().setTelephone(telephone);
+        doctor.getUser().setDateOfBurn(dateOfBurn);
         doctor.setSpeciality(speciality);
         save(doctor);
     }

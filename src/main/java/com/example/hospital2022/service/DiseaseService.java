@@ -20,15 +20,22 @@ public class DiseaseService implements com.example.hospital2022.service.Service<
     }
 
     public List<Disease> diagnosisList(Long diagnosisId){
+        if(diagnosisId!=null)
         return diseaseRepo.findByDiagnosisId(diagnosisId);
+        return diseaseRepo.findAll();
     }
 
     public List<Disease> patientTitleList(String title){
+        if(title!=null)
         return diseaseRepo.findByPatientUserSecondNameContains(title);
+        return diseaseRepo.findAll();
     }
 
     public List<Disease> patientList(Long id){
+        if(id!=null)
         return diseaseRepo.findByPatientId(id);
+        return diseaseRepo.findAll();
+
     }
 
     @Override

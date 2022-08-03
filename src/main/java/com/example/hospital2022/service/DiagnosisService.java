@@ -14,7 +14,8 @@ public class DiagnosisService implements com.example.hospital2022.service.Servic
 
     @Override
     public List<Diagnosis> list(String title) {
-        return diagnosisRepo.findByTitleContains(title);
+        if(title!=null)return diagnosisRepo.findByTitleContains(title);
+        return diagnosisRepo.findAll();
     }
 
     @Override
