@@ -19,6 +19,7 @@ public class Doctor {
     @OneToOne(fetch = FetchType.EAGER)
     private User user;
     private String speciality;
+    private String cabinet;
 
     //Доктор лечит много пациентов, у пациента может быть много докторов
     @ManyToMany

@@ -43,13 +43,14 @@ public class DoctorService implements Service<Doctor> {
     }
 
     public void correct(Doctor doctor, String name, String secondName, String fatherName,
-                        String telephone, LocalDate dateOfBurn, String speciality){
+                        String telephone, LocalDate dateOfBurn, String speciality, String cabinet){
         doctor.getUser().setName(name);
         doctor.getUser().setSecondName(secondName);
         doctor.getUser().setFatherName(fatherName);
         doctor.getUser().setTelephone(telephone);
         doctor.getUser().setDateOfBurn(dateOfBurn);
         doctor.setSpeciality(speciality);
+        doctor.setCabinet(cabinet);
         save(doctor);
     }
 

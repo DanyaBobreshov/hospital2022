@@ -29,9 +29,14 @@
                                      id="telephone" name="telephone">
                           </div>
                            <div class="form-group">
-                               <label for="speciality">Фамилия</label>
+                               <label for="speciality">Специальность</label>
                                <input type="text" value="${doctor.speciality}"required class="form-control"
                                       id="speciality" name="speciality">
+                           </div>
+                           <div class="form-group">
+                               <label for="cabinet">Кабинет</label>
+                               <input type="text" value="${doctor.speciality}"required class="form-control"
+                                      id="cabinet" name="cabinet">
                            </div>
              </div>
                <input type="hidden" name="_csrf" value="${_csrf.token}"/>

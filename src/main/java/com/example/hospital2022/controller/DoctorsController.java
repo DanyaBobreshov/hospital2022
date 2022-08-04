@@ -45,9 +45,10 @@ public class DoctorsController {
                              @RequestParam("dateOfBurn") Date dateOfBurn,
                              @RequestParam("telephone") String telephone,
                              @RequestParam("speciality") String speciality,
+                             @RequestParam("speciality") String cabinet,
                              @PathVariable("id") Long id) {
         Doctor doctor = doctorService.findById(id);
-        doctorService.correct(doctor, name, secondName, fatherName, telephone, dateOfBurn.toLocalDate(), speciality);
+        doctorService.correct(doctor, name, secondName, fatherName, telephone, dateOfBurn.toLocalDate(), speciality,cabinet);
         return "redirect:/addDoctors";
     }
 
