@@ -41,6 +41,10 @@ public class PatientService implements Service<Patient> {
         return null;
     }
 
+    public Patient findByUserLogin(String login) {
+        return patientRepo.findByUserLoginContains(login).orElse(null);
+    }
+
     public void correct(Patient patient, String name, String secondName, String fatherName,
                         String telephone){
         patient.getUser().setName(name);

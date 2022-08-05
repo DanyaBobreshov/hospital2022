@@ -10,17 +10,14 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-public class DayMatrixAppointment {
+public class MatrixAppointments {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(cascade = CascadeType.REFRESH, fetch = FetchType.LAZY)
-    @JoinColumn
-    private Doctor doctor;
+    @OneToOne(fetch = FetchType.EAGER)
+    Doctor doctor;
 
     @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
-    private List<DayListAppointment> daysList=new ArrayList<>();
-
-
+    private List<DayListAppointment> days=new ArrayList<>();
 }
