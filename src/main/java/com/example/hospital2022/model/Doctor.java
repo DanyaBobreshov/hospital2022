@@ -32,5 +32,8 @@ public class Doctor {
     @OneToMany(cascade = CascadeType.ALL, fetch=FetchType.LAZY)
     private List<Appointment> appointments;
 
+    @OneToOne(fetch = FetchType.EAGER)
+    MatrixAppointments matrixAppointments;
+
 
 }

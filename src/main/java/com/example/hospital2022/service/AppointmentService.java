@@ -1,10 +1,14 @@
 package com.example.hospital2022.service;
 
 import com.example.hospital2022.model.Appointment;
+import com.example.hospital2022.model.Doctor;
+import com.example.hospital2022.model.Examination;
+import com.example.hospital2022.model.Patient;
 import com.example.hospital2022.repository.AppointmentRepo;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @org.springframework.stereotype.Service
@@ -59,5 +63,12 @@ public class AppointmentService implements Service<Appointment> {
 
     public Appointment findByExamination(Long id){
         return appointmentRepo.findByExaminationId(id).orElse(null);
+    }
+
+    public void correct(Appointment appointment, LocalDate date, LocalTime time, String cabinet){
+        appointment.setDate(date);
+        appointment.setTime(time);
+        appointment.setCabinet(cabinet);
+        save(appointment);
     }
 }

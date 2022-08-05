@@ -37,6 +37,9 @@ public class DoctorService implements Service<Doctor> {
     public Doctor findByTitle(String title) {
         return null;
     }
+    public Doctor findByUserLogin(String login){
+        return doctorRepo.findByUserLoginContains(login).orElse(null);
+    }
 
     public Doctor findByUserId(Long id){
         return doctorRepo.findByUserId(id).orElse(null);
