@@ -32,8 +32,9 @@ public class DiseaseService implements com.example.hospital2022.service.Service<
     }
 
     public List<Disease> patientList(Long id){
-        if(id!=null)
-        return diseaseRepo.findByPatientId(id);
+        if(id!=null) {
+            return diseaseRepo.findByPatientId(id);
+        }
         return diseaseRepo.findAll();
 
     }

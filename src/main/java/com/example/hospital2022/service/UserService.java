@@ -1,6 +1,7 @@
 package com.example.hospital2022.service;
 
 
+import com.example.hospital2022.model.Patient;
 import com.example.hospital2022.model.User;
 import com.example.hospital2022.model.enums.Role;
 import com.example.hospital2022.repository.UserRepo;
@@ -22,6 +23,7 @@ import java.util.stream.Collectors;
 public class UserService {
     private final UserRepo userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final PatientService patientService;
 
     public boolean createUser(User user){
         String login = user.getLogin();
@@ -31,6 +33,9 @@ public class UserService {
         user.getRoles().add(Role.ROLE_DOCTOR);
         log.info("Saving new User with email: {}", login);
         userRepository.save(user);
+        Patient patient=new Patient();
+        patient.setUser(user);
+        patientService.save(patient);
         return true;
     }
 

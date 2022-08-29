@@ -1,10 +1,11 @@
 package com.example.hospital2022.controller;
 
 import com.example.hospital2022.model.Appointment;
-import com.example.hospital2022.model.DayListAppointment;
 import com.example.hospital2022.model.Doctor;
-import com.example.hospital2022.model.MatrixAppointments;
-import com.example.hospital2022.service.*;
+import com.example.hospital2022.model.User;
+import com.example.hospital2022.service.AppointmentService;
+import com.example.hospital2022.service.DoctorService;
+import com.example.hospital2022.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,76 +19,68 @@ import java.sql.Date;
 import java.sql.Time;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Optional;
+import java.time.LocalTime;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
 public class DoctorAppointmentController {
     private final UserService userService;
     private final DoctorService doctorService;
-    private final DayListAppointmentService dayListAppointmentService;
-    private final MatrixAppointmentsService matrixAppointmentsService;
     private final AppointmentService appointmentService;
-    private final PatientService patientService;
-    @GetMapping("/doctor-appointments/{id}")
-    public String doctorAppoints(@RequestParam(name = "SearchWord", required = false)
-                            Principal principal, Model model, @PathVariable("id") Long id) {
-        Doctor doctor=doctorService.findById(id);
+    @GetMapping("doctor-appointments/{id}")
+    public String doctorAppoints (Principal principal, Model model, @PathVariable("id") Long id){
+        Doctor doctor =doctorService.findById(id);
         LocalDate date=LocalDate.now();
-        ArrayList<DayListAppointment> dayList;
-        if(date.getDayOfWeek().equals(DayOfWeek.SATURDAY)){
-            dayList = (ArrayList<DayListAppointment>) dayListAppointmentService.list(" ");
-            for(DayListAppointment dayListAppointment:dayList){
-                doctor.getMatrixAppointments().getDays().remove(dayListAppointment);
-                matrixAppointmentsService.save(doctor.getMatrixAppointments());
-                dayListAppointmentService.delete(dayListAppointment);
-            }
-            if (doctor.getMatrixAppointments()==null){
-                MatrixAppointments matrixAppointments=new MatrixAppointments();
-                matrixAppointmentsService.save(matrixAppointments);
-                doctor.setMatrixAppointments(matrixAppointments);
-            }
-         dayList= (ArrayList<DayListAppointment>) dayListAppointmentService.makeNewDayListAppointment(date, doctor, doctor.getMatrixAppointments());
-        }else {
-            dayList= (ArrayList<DayListAppointment>) doctor.getMatrixAppointments().getDays();
+        LocalDate varDate=LocalDate.now();
+        if(varDate.getDayOfWeek().equals(DayOfWeek.SATURDAY)){
+           varDate= varDate.plusDays(2);
         }
-        date=LocalDate.now();
-        for(int i=1; i<6; i++){
-            model.addAttribute("appointments"+i, dayList.get(i-1).getAppointments());
+        if (varDate.getDayOfWeek().equals(DayOfWeek.SUNDAY)){
+            varDate= varDate.plusDays(1);
         }
-        model.addAttribute("date", LocalDate.now());
-        for (int i=1; i<6; i++){
-            model.addAttribute("date"+i, date);
-            date=date.plusDays(1);
+        List<Appointment>appointmentList;
+        for(int i=1; i<8; i++){
+            appointmentList=appointmentService.findByDoctorAndDate(doctor, varDate);
+            model.addAttribute("appointments"+i,appointmentList);
+            model.addAttribute("date"+i, varDate);
+            varDate=varDate.plusDays(1);
+            if(varDate.getDayOfWeek().equals(DayOfWeek.SATURDAY)){
+                varDate=  varDate.plusDays(2);
+            }
+            if (varDate.getDayOfWeek().equals(DayOfWeek.SUNDAY)){
+                varDate=  varDate.plusDays(1);
+            }
         }
         model.addAttribute("user", userService.getUserByPrincipal(principal));
         model.addAttribute("doctorName", doctor.getUser().getSecondName());
-        model.addAttribute("date", LocalDate.now());
+        model.addAttribute("date", date);
         return "doctor-appointments";
     }
 
     @GetMapping("/doctor-appointmentEdit/{id}")
-    public String doctorappointment(@PathVariable("id") String idString, Model model, Principal principal){
-        idString=idString.replaceAll("\\s","");
-        System.out.println(idString);
-        Long id=Long.valueOf(idString);
-        Appointment appointment=appointmentService.findById(id);
-        model.addAttribute("appointment", appointment);
+    public String addDoctorsEdit(@PathVariable("id") Long id, Model model, Principal principal) {
+        Doctor doctor = doctorService.findById(id);
         model.addAttribute("user", userService.getUserByPrincipal(principal));
+        model.addAttribute("appointment", appointmentService.findById(id));
         return "doctor-appointmentEdit";
     }
 
     @PostMapping("/doctor-appointmentEdit/{id}")
-    public String doctorappointmentEdit(@PathVariable("id") String idString,
-                                        @RequestParam("date")Date date,
-                                        @RequestParam("time") Time time,
-                                        @RequestParam("cabinet")String cabinet){
-       String nidString=idString.replaceAll("\\s","");
-        Long id=Long.valueOf(nidString);
+    public String doctorAppointmentEdit(@PathVariable("id") Long id,
+                                        @RequestParam ("date")Date dateSQL,
+                                        @RequestParam("time")String timeSQL,
+                                        @RequestParam("cabinet") String cabinet){
         Appointment appointment=appointmentService.findById(id);
-        appointmentService.correct(appointment,date.toLocalDate(), time.toLocalTime(), cabinet);
-        return "redirect:/doctor-appointmentEdit";
+        appointmentService.correct(appointment,dateSQL.toLocalDate(), LocalTime.parse(timeSQL),cabinet);
+        return "redirect:/doctor-appointmentEdit/{id}";
+    }
+
+    @PostMapping("/doctor-appointmentDelete/{id}")
+    public String delete(@PathVariable("id") Long id, Principal principal) {
+        User user = userService.getUserByPrincipal(principal);
+        appointmentService.delete(appointmentService.findById(id));
+        return "redirect:/doctorPage";
     }
 
 }

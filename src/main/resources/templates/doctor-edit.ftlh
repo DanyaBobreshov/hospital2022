@@ -19,7 +19,7 @@
                                      id="fatherName" name="fatherName">
                           </div>
                           <div class="form-group">
-                              <label for="dateOfBurn">Дата выявления</label>
+                              <label for="dateOfBurn">Дата рождения</label>
                               <input type="date" value="${doctor.user.dateOfBurn}"required class="form-control"
                                      id="dateOfBurn" name="dateOfBurn">
                           </div>

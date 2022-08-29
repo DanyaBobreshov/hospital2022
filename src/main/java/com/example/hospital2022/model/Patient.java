@@ -30,12 +30,12 @@ public class Patient {
     @JoinTable(name="patients_diseases",
           joinColumns = @JoinColumn(name="patient_id"),
           inverseJoinColumns = @JoinColumn(name="disease_id"))
-    private List<Disease> diseases;
+    private List<Disease> diseases=new ArrayList<>();
 
     @ManyToMany
     @JoinTable(name="patients_diagnoses",
             joinColumns = @JoinColumn(name="patient_id"),
             inverseJoinColumns = @JoinColumn(name="diagnosis_id"))
-    private List<Diagnosis> diagnoses;
+    private List<Diagnosis> diagnoses=new ArrayList<>();
 
 }

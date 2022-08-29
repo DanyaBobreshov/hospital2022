@@ -10,4 +10,8 @@ public interface DoctorRepo extends JpaRepository<Doctor, Long> {
     List<Doctor> findByUserSecondNameContains(String secondName);
     Optional<Doctor> findByUserLoginContains(String login);
     Optional<Doctor> findByUserId(Long id);
+
+    List<Doctor> findBySpecialityContains(String titleSpeciality);
+    List<Doctor> findByUserSecondNameContainsAndSpecialityContains(String titleName, String titleSpeciality);
 }
+

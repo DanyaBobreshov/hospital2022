@@ -1,15 +1,21 @@
 package com.example.hospital2022.service;
 
+import com.example.hospital2022.model.Doctor;
 import com.example.hospital2022.model.Patient;
 import com.example.hospital2022.repository.PatientRepo;
+import com.example.hospital2022.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @org.springframework.stereotype.Service
 @RequiredArgsConstructor
 public class PatientService implements Service<Patient> {
     private final PatientRepo patientRepo;
+    private final UserRepo userRepo;
     @Override
     public List<Patient> list(String title) {
         if(title!=null)
@@ -24,6 +30,10 @@ public class PatientService implements Service<Patient> {
     @Override
     public Patient findById(Long id) {
         return patientRepo.findById(id).orElse(null);
+    }
+
+    public Patient findByUserId(Long id){
+        return patientRepo.findByUserId(id).orElse(null);
     }
 
     @Override
@@ -46,11 +56,30 @@ public class PatientService implements Service<Patient> {
     }
 
     public void correct(Patient patient, String name, String secondName, String fatherName,
-                        String telephone){
+                        LocalDate dateOfBurn, String telephone){
         patient.getUser().setName(name);
         patient.getUser().setSecondName(secondName);
         patient.getUser().setFatherName(fatherName);
         patient.getUser().setTelephone(telephone);
+        patient.getUser().setDateOfBurn(dateOfBurn);
+        userRepo.save(patient.getUser());
         save(patient);
+    }
+
+    public List<Patient> findByDoctor(Doctor doctor) {
+        return patientRepo.findByDoctors(doctor);
+    }
+
+    public List<Patient> findByDoctorAndTitleContains(Doctor doctor, String title) {
+        List<Patient>patients;
+        if(title==null){
+            patients= findByDoctor(doctor);
+        }else {
+            patients = patientRepo.findByDoctorsAndUserSecondNameContains(doctor, title);
+        }
+        Set<Patient> set = new HashSet<>(patients);
+        patients.clear();
+        patients.addAll(set);
+        return patients;
     }
 }

@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 //заболевание конкретного пациента (простуда а двух пациентов - два разных объекта Disease
@@ -26,7 +27,7 @@ public class Disease {
     private String form;
 
     @OneToMany(cascade = CascadeType.REFRESH, fetch=FetchType.LAZY)
-    private List <Examination> examination;
+    private List <Examination> examination=new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn

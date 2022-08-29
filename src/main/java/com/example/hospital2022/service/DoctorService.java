@@ -57,4 +57,16 @@ public class DoctorService implements Service<Doctor> {
         save(doctor);
     }
 
+    public List<Doctor> listForPatient(String titleName, String titleSpeciality) {
+        if(titleName!=null&&titleSpeciality!=null) {
+            return doctorRepo.findByUserSecondNameContainsAndSpecialityContains(titleName, titleSpeciality);
+        }
+        if(titleSpeciality!=null){
+            return doctorRepo.findBySpecialityContains(titleSpeciality);
+        }
+        if (titleName!=null){
+            return doctorRepo.findByUserSecondNameContains(titleName);
+        }
+        return doctorRepo.findAll();
+    }
 }
